@@ -1,0 +1,25 @@
+header.bg-indigo-600.p-4
+    div.container.mx-auto.flex.justify-between.items-center
+        a(href="/")
+            h1.text-2xl.text-white.font-extrabold.text-center REAL
+                span.font-normal ESTATE
+        nav(class="my-5 text-sm md:flex md:items-center md:gap-3 font-bold text-white")
+            a(href="/auth/signup") Sign up
+            a(href="/auth/login") Sign in
+
+div(class="bg-indigo-700 py-5 hidden lg:block")
+    div(class="container mx-auto flex justify-between")
+        nav(class="flex gap-5 items-center")
+            a(href="/categories/1" class="text-sm font-bold uppercase text-white") House
+            a(href="/categories/2" class="text-sm font-bold uppercase text-white") Apartment
+            a(href="/categories/3" class="text-sm font-bold uppercase text-white") Warehouse
+            a(href="/categories/4" class="text-sm font-bold uppercase text-white") Piece of land
+            a(href="/categories/5" class="text-sm font-bold uppercase text-white") Cottage
+        form(method="POST" action="/search" class="flex gap-3 items-center")
+            input(type="hidden" name="_csrf" value=csrfToken)
+            label(for="term" class="text-sm uppercase font-bold text-white") Search
+            input(type="text" id="term" name="term" placeholder="Search properties" class="p-2 rounded-lg shadow")
+            //- input(type="submit" value="search" class="bg-indigo-800 hover:bg-indigo-500 rounded-lg text-white uppercase font-bold p-2 cursor-pointer text-sm")
+            button(class="bg-indigo-800 hover:bg-indigo-500 rounded-lg text-white uppercase font-bold p-2 cursor-pointer text-sm")
+                svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6")
+                    path(stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z")

@@ -1,0 +1,25 @@
+extends ../layout/admin
+
+block content
+    div(class="space-y-10")
+        h1(class="text-center text-4xl font-extrabold")= page
+        if errors
+            div(class="max-w-md mx-auto my-10")
+                each error in errors
+                    p(class="bg-red-600 text-white font-bold text-xs uppercase text-center p-2 mb-1")= error.msg
+        div(class="bg-white shadow rounded-lg mx-auto max-w-lg pb-2 px-2 space-y-3")
+            form(method="POST" id="user_info" class="p-3 space-y-5")
+                input(type="hidden" name="_csrf" value=csrfToken)
+                div
+                    label(class="block text-sm uppercase text-gray-500 mb-2 font-bold" for="name") Name:
+                    input(type="text" id="name" class="w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400" name="name" value=name readonly)
+                div
+                    label(class="block text-sm uppercase text-gray-500 mb-2 font-bold" for="email") Email:
+                    input(type="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400" name="email" value=email readonly)
+                div(id="buttons_container" class="space-y-2 hidden")
+                    button(type="button" id="cancel_edit" class="bg-red-500 w-full text-white text-sm text-center font-bold uppercase p-2 rounded hover:bg-red-700") Cancel
+                    button(id="submit_edit" class="bg-green-500 w-full text-white text-sm text-center font-bold uppercase p-2 rounded hover:bg-green-700") Save
+            a(href=`/auth/change-password` class="font-bold text-indigo-500 text-xs hover:text-indigo-700 p-3") Change Password
+            button(type="button" id="edit_button" class="w-full bg-indigo-500 text-white text-sm text-center font-bold p-2 rounded hover:bg-indigo-700") Edit info
+block scripts
+    script(src="/js/editInfo.js")

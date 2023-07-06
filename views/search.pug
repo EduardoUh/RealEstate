@@ -1,0 +1,13 @@
+extends ./layout/app-public
+
+
+block content
+        section(class="py-3")
+            h2(class="text-center text-4xl font-extrabold py-10")= page
+            //- pre= JSON.stringify(houses, undefined, 2)
+            if properties.length
+                div(class="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-5")
+                    each property in properties
+                        include ./templates/card
+            else
+                p(class="p-3 text-gray text-center font-bold text-2xl rounded") No results

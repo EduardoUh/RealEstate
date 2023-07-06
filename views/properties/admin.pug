@@ -1,0 +1,57 @@
+extends ../layout/admin
+
+block styles
+    //- this way you can get the csrfToken value in the script
+    meta(name="csrf-token" content=csrfToken)
+
+block content
+    div.py-10
+        h1.text-5xl.my-10.font-extrabold.text-center REAL
+            span.font-normal ESTATE
+        h2.text-center.text-2xl.font-extrabold= page
+        a(href="/properties/create" class="rounded px-10 py-2 bg-indigo-400 hover:bg-indigo-600 text-sm text-white text-center font-bold uppercase my-5 inline-block w-full sm:w-auto") Publish property
+        if  properties.length
+            div(class="bg-white shadow rounded-lg mx-auto border border-dotted")
+                ul(class="divide-y divide-gray-200")
+                    each property in properties
+                        li
+                            div(class="p-6 w-full flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-8 md:space-y-0 gap-4")
+                                div(class="sm:w-1/4 md:w-1/6")
+                                    img(src=`uploads/${property.picture}`, alt=`Property picture ${property.title}` class="w-full block")
+                                div(class="sm:w-2/4 md:w-3/6 lg:w-4/6 space-y-2")
+                                    a(class="block text-2xl font-extrabold text-indigo-600 truncate" href=`/property/${property.id}`)= property.title
+                                    p(class="text-sm text-black font-bold flex items-center")
+                                        svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6")
+                                            path(stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z")
+                                            path(stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z")
+                                        = property.category.name
+                                    p(class="text-sm text-gray-500 font-bold flex items-center")
+                                        svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6")
+                                            path(stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z")
+                                        = property.price.name
+                                    a(class="text-sm text-indigo-500 font-bold flex items-center" href=`/see-messages/${property.id}`)= `${property.messages.length} messages`
+                                div(class="sm:w-1/4 md:w-2/6 xl:flex-1 flex flex-col gap-2 2xl:flex-row")
+                                    button(type="button" data-property-id=`${property.id}` class=`update-state w-full px-2 py-2 md:py-1 text-xs leading-5 font-semibold rounded cursor-pointer ${property.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`)=`${property.published ? 'Published' : 'Not published'}`
+                                    a(href=`/properties/edit/${property.id}` class="px-2 text-center py-2 md:py-1 text-xs leading-5 font-semibold rounded cursor-pointer bg-indigo-100 text-indigo-800 inline-block") Edit
+                                    form(method="POST" action=`/properties/delete/${property.id}`)
+                                        input(type="hidden" name="_csrf" value= csrfToken)
+                                        input(type="submit" class="w-full px-2 py-2 md:py-1 text-xs leading-5 font-semibold rounded cursor-pointer bg-red-100 text-red-800" value="Delete")
+                div(class="bg-white px-4 py-3 flex items-center justify-between sm:flex-col sm:gap-2 border-t border-gray-200 sm:px-6")
+                    div(class="flex-1 flex justify-between sm:hidden")
+                        a(href=`/my-properties?page=${(currentPage - 1)}` class=`${currentPage === 1 ? 'pointer-events-none': ''} relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-500`) Previous
+                        a(href=`/my-properties?page=${(currentPage + 1)}` class=`${currentPage === pages ? 'pointer-events-none': ''} relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-500`) Next
+                    div(class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between")
+                        p(class="text-sm text-gray-700 gap-2") Now Showing&nbsp;
+                            span(class="font-medium") #{offset + 1} to&nbsp;
+                            span(class="font-medium") #{limit + offset > count  ? count : limit + offset} from&nbsp;
+                            span(class="font-medium") #{count} records
+                    div(class="hidden sm:block")
+                        nav(class="relative z-0 inline-flex rounded-md shadow-md")
+                            - var n = 1;
+                                while n <= pages
+                                    a(href=`/my-properties?page=${n}` class=`relative inline-flex items-center px-4 py-2 border rounded text-sm font-medium ${n == currentPage ? 'bg-indigo-50 border-indigo-300 text-indigo-600' : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50' }`) #{n++}
+        else
+            p.text-center No properties registered yet
+        //- pre= JSON.stringify(properties, null, 2)
+block scripts
+    script(src="/js/updateState.js")

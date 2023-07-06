@@ -1,0 +1,59 @@
+extends ../layout/app-public
+
+block styles
+    link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
+
+block content
+    div.py-10
+        h1(id="title" class="text-4xl my-10 font-extrabold text-center")= property.title
+        
+        div
+            a(href="#" class="font-bold text-gray-600 txt-sm") Category: 
+                span(class="font-normal")= property.category.name
+        div(class="mt-5 md:flex md:gap-4 md:items-start")
+            div(class="md:w-2/3 bg-white shadow rounded-lg")
+                img(src=`/uploads/${property.picture}` alt= `Property picture - ${property.title}`)
+                div(class="px-5 py-10 space-y-5")
+                    p= property.description
+                    
+                    h2(class="text-2xl leading-6 font-bold text-gray-900") Property info
+                    div(class="grid grid-cols-1 md:grid-cols-2 gap-2")
+                        p(class="text-gray-600 font-bold text-xs") WC
+                            span(class="text-gray-800 block text-lg")= property.wc
+                        p(class="text-gray-600 font-bold text-xs") Rooms
+                            span(class="text-gray-800 block text-lg")= property.rooms
+                        p(class="text-gray-600 font-bold text-xs") Parking sites
+                            span(class="text-gray-800 block text-lg")= property.parking
+                        p(class="text-gray-600 font-bold text-xs") Price
+                            span(class="text-gray-800 block text-lg")= property.price.name
+            aside(class="md:w-1/3 bg-white rounden-lg shadow")
+                h3(class="text-center py-10 leading-6 text-2xl font-bold text-gray-900") Location
+                div(class="h-96 mx-1" id="map")
+                    p(id="lat" class="hidden")= property.lat
+                    p(id="lng" class="hidden")= property.lng
+                div(class="p-5")
+                    p(class="text-gray-600 font-bold text-xs") Location
+                        span(id="address" class="text-gray-900 block text-lg")= property.address
+                    if !isOwner
+                        h3(class="text-2xl text-center my-7 font-extrabold text-gray-900") Seller
+                        if !user
+                            div(class="flex flex-col items-center justify-center gap-2")
+                                p(class="text-center") If you want to get in touch with seller
+                                a(class="text-indigo-400" href="/auth/signup") create and account
+                        else if sendMessage
+                            p(class="p-2 bg-green-100 font-bold text-xs text-green-600 rounded uppercase text-center") Message sent successfully
+                        else
+                            if errors
+                                div(class="max-w-md md-auto")
+                                    each error in errors
+                                        div(class="mb-2 bg-red-600 rounded p-1 text-center text-white font-bold uppercase text-xs")= error.msg
+                            form(method="POST")
+                                input(type="hidden" name="_csrf" value=csrfToken)
+                                div(class="space-y-5")
+                                    label(for="message") Message
+                                    textarea(id="message" name="message" class="w-full py-2 border border-gray-300 rounded-lg p-2 placeholder-gray-400" placeholder="Write Message here")
+                                    input(type="submit" value="Send Message" class="w-full bg-indigo-600 rounded py-2 text-white hover:bg-indigo-400 cursor-pointer font-bold text-sm")
+            //- pre= JSON.stringify(property, null, 2)
+block scripts
+    script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
+    script(src="/js/showMap.js")

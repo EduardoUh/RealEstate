@@ -1,0 +1,15 @@
+extends ../layout/index
+
+block content
+    div.py-10
+        h1.text-5xl.my-10.font-extrabold.text-center REAL
+            span.font-normal ESTATE
+        h2.text-center.text-2xl.font-extrabold= page
+
+        p.text-xl.font-bold.text-center.my-10= message
+        p.text-md Note: if you do not recieve the email in few minutes:
+            ul.list-disc.list-inside.m-2
+                li check spam folder
+                li verify if typed your email correctly
+                li if you can't resolve the issue, please contact
+                    a(href="mailto:support@bienesraices.io" target="_blank" class="text-indigo-300") &nbsp;support@bienesraices.io

@@ -1,0 +1,78 @@
+extends ../layout/admin
+
+block styles
+    link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
+
+block content
+    div.py-10
+        h1.text-5xl.my-10.font-extrabold.text-center REAL
+            span.font-normal ESTATE
+        h2.text-center.text-2xl.font-extrabold= page
+        if errors
+            div(class="max-w-md mx-auto my-10")
+                each error in errors
+                    p(class="bg-red-600 text-white font-bold text-xs uppercase text-center p-2 mb-1")= error.msg
+        div(class="bg-white shadow py-8 px-4 rounded mx-auto max-w-4xl my-10 md:px-10")
+            form(class="space-y-8" method="POST" action="/properties/create")
+                input(type="hidden" name="_csrf" value=csrfToken)
+                div.space-y-5
+                    h3(class="text-lg leading-6 font-medium text-gray-900 text-center") Info
+                    p.text-gray.text-center Add more information about the property
+
+                    div
+                        label.block.text-sm.uppercase.text-gray-500.mb-3.font-bold(for="title") Announcement title
+                        input#title.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Property title, ej. House in the beach" type="text" name="title" value= data.title ? data.title : "")
+                    div
+                        label.block.text-sm.uppercase.text-gray-500.mb-3.font-bold(for="description") Description
+                        textarea#description.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Describe your property" name="description")= data.description ? data.description : ""
+                    div(class="md:flex md:gap-4 space-y-5 md:space-y-0")
+                        div(class="md:w-1/2")
+                            label.block.text-sm.uppercase.text-gray-500.mb-3.font-bold(for="category") Category
+                            select#category.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="category")
+                                option(value= "") - choose a category -
+                                each category in categories
+                                    option(value=category.id selected= data.category ? data.category == category.id ? true : false : null)= category.name
+                        div(class="md:w-1/2")
+                            label.block.text-sm.uppercase.text-gray-500.mb-3.font-bold(for="price") Price
+                            select#price.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="price")
+                                option(value="") - Choose a price range -
+                                each price in prices
+                                    option(value=price.id selected= data.price ? data.price == price.id ? true : false : null)= price.name
+                    div(class="md:flex md:gap-4 space-y-5 md:space-y-0")
+                        div(class="md:w-1/3")
+                            label.block.text-sm.uppercase.text-gray-500.mb-3.font-bold(for="rooms") Rooms
+                            select#rooms.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="rooms")
+                                option(value="") - Choose a room number -
+                                - let roomNumber = 1;
+                                    while roomNumber <= 10
+                                        option(value=roomNumber selected= data.rooms ? data.rooms == roomNumber ? true : false : null) #{roomNumber++}
+                        div(class="md:w-1/3")
+                            label.block.text-sm.uppercase.text-gray-500.mb-3.font-bold(for="parking") Parking
+                            select#parking.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gry-400(name="parking")
+                                option(value="") - Choose parking number -
+                                - let parkingNumber = 1;
+                                    while parkingNumber <= 5
+                                        option(value=parkingNumber selected= data.parking ? data.parking == parkingNumber ? true : false : null) #{parkingNumber++}
+                        div(class="md:w-1/3")
+                            label.block.text-sm.uppercase.text-gray-500.mb-3.font-bold(for="wc") Wc
+                            select#wc.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="wc")
+                                option(value="") - Choose a wc number -a
+                                - let wcNumber = 1;
+                                    while wcNumber <= 5
+                                        option(value=wcNumber selected= data.wc ? data.wc == wcNumber ? true : false : null) #{wcNumber++}
+                    div.border-gray-200.border-t.py-5.space-y-5
+                        h3.text-lg.leading-6.font-medium.text-gray-900 Location
+                        p.text-gray-600 Set the location in the map
+                        #map.h-96
+                        div
+                            p.address= data.address ? data.address : ""
+                        input(type="hidden" name="address" id="address" value= data.address ? data.address : "")
+                        input(type="hidden" name="lat" id="lat" value= data.lat ? data.lat : "")
+                        input(type="hidden" name="lng" id="lng" value= data.lng ? data.lng : "")
+                    input(class="w-full bg-indigo-600 py-2 text-white font-bold rounded-sm cursor-pointer hover:bg-indigo-700" type="submit" value="Add Image")
+block scripts
+    script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
+    script(src="https://unpkg.com/esri-leaflet@3.0.8/dist/esri-leaflet.js")
+    script(src="https://unpkg.com/esri-leaflet-geocoder@2.2.13/dist/esri-leaflet-geocoder.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geosearch/2.7.0/bundle.min.js")
+    script(src="/js/map.js")

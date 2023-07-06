@@ -1,0 +1,23 @@
+extends ../layout/admin.pug
+
+block content
+    h1.text-5xl.my-10.font-extrabold.text-center REAL
+        span.font-normal ESTATE
+    h2.text-center.text-2xl.font-extrabold= page
+    a(href="/my-properties" class="bg-indigo-400 rounded font-bold text-white uppercase text-xs py-2 px-10 hover:bg-indigo-700 text-center") Back
+    //- pre= JSON.stringify(messages, null, 2)
+    div(class="mx-auto max-w-4xl bg-white shadow my-5 rounded p-5")
+        if messages.length > 0
+            ul
+                each msg in messages
+                    li(class="border-gray-200 border-b p-5")
+                        p(class="font-bold text-gray-800") Name: 
+                            span(class="font-normal")= msg.user.name
+                        p(class="font-bold text-gray-800") Email: 
+                            span(class="font-normal")= msg.user.email
+                        p(class="font-bold text-gray-800") Message: 
+                            span(class="font-normal")= msg.message
+                        p(class="font-bold text-gray-800") Sent: 
+                            span(class="font-normal")= formatDate(msg.createdAt)
+        else
+            p(class="text-center text-gray-600") 0 messages for this property
